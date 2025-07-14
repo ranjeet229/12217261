@@ -2,19 +2,29 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import { logger } from './middleware/logger.js';
-import urlRoutes from './routes/urlRoutes.js';
+import routeHandler from './routes/urlRoutes.js';
 
 dotenv.config();
+
 const app = express();
 
 app.use(express.json());
 app.use(logger);
-app.use('/', urlRoutes);
+app.use('/', routeHandler);
 
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
-    app.listen(process.env.PORT, () => {
-      console.log(`Server running on port ${process.env.PORT}`);
+const startApp = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
     });
-  })
-  .catch((err) => console.error('MongoDB connection error:', err));
+
+    app.listen(process.env.PORT, () => {
+      console.log(`Server is running on port ${process.env.PORT}`);
+    });
+  } catch (error) {
+    console.error('Failed to connect to database:', error.message);
+  }
+};
+
+startApp();

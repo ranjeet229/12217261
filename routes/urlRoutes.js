@@ -1,9 +1,9 @@
 import express from 'express';
 import { createShortUrl, redirectUrl } from '../controllers/urlController.js';
 
-const router = express.Router();
+const routeHandler = express.Router();
 
-router.post('/shorturls', createShortUrl);
-router.get('/:code', redirectUrl);
+routeHandler.route('/shorturls').post(createShortUrl);
+routeHandler.route('/:code').get(redirectUrl);
 
-export default router;
+export default routeHandler;
