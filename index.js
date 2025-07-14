@@ -1,9 +1,8 @@
-
-const express = require('express');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const logger = require('./middleware/logger');
-const urlRoutes = require('./routes/urlRoutes');
+import express from 'express';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import { logger } from './middleware/logger.js';
+import urlRoutes from './routes/urlRoutes.js';
 
 dotenv.config();
 const app = express();
@@ -18,4 +17,4 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
       console.log(`Server running on port ${process.env.PORT}`);
     });
   })
-  .catch((err) => console.error(err));
+  .catch((err) => console.error('MongoDB connection error:', err));

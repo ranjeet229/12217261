@@ -1,8 +1,9 @@
-const express = require('express');
+import express from 'express';
+import { createShortUrl, redirectUrl } from '../controllers/urlController.js';
+
 const router = express.Router();
-const { createShortUrl, redirectUrl } = require('../controllers/urlController');
 
 router.post('/shorturls', createShortUrl);
 router.get('/:code', redirectUrl);
 
-module.exports = router;
+export default router;

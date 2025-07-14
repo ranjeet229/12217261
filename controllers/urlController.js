@@ -1,7 +1,7 @@
-const Url = require('../models/Url');
-const { nanoid } = require('nanoid');
+import { Url } from '../models/Url.js';
+import { nanoid } from 'nanoid';
 
-exports.createShortUrl = async (req, res) => {
+export const createShortUrl = async (req, res) => {
   const { url, validity = 30, shortcode } = req.body;
 
   try {
@@ -9,7 +9,7 @@ exports.createShortUrl = async (req, res) => {
     const expiry = new Date(Date.now() + validity * 60000);
 
     const existing = await Url.findOne({ shortcode: code });
-    if (existing && !shortcode) return createShortUrl(req, res); // Regenerate
+    if (existing && !shortcode) return createShortUrl(req, res);
     if (existing) return res.status(409).json({ message: 'Shortcode already exists' });
 
     const newUrl = new Url({ originalUrl: url, shortcode: code, expiry });
@@ -24,7 +24,7 @@ exports.createShortUrl = async (req, res) => {
   }
 };
 
-exports.redirectUrl = async (req, res) => {
+export const redirectUrl = async (req, res) => {
   try {
     const urlData = await Url.findOne({ shortcode: req.params.code });
 

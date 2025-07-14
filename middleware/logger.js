@@ -1,13 +1,12 @@
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const fs = require('fs');
-const path = require('path');
-
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const logFile = path.join(__dirname, '..', 'logs.txt');
 
-const logger = (req, res, next) => {
+export const logger = (req, res, next) => {
   const log = `${new Date().toISOString()} - ${req.method} ${req.originalUrl}\n`;
   fs.appendFileSync(logFile, log);
   next();
 };
-
-module.exports = logger;
