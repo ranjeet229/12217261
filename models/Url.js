@@ -6,6 +6,6 @@ const ShortUrlSchema = new Schema({
   longUrl: { type: String, required: true },
   shortCode: { type: String, required: true, unique: true },
   expiresAt: { type: Date, required: true },
-});
+},{ timestamps: true});
 
 export const Url = mongoose.model('ShortenedUrl', ShortUrlSchema);

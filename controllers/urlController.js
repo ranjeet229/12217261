@@ -18,9 +18,9 @@ export const createShortUrl = async (req, res) => {
     }
 
     const newEntry = new Url({
-      originalUrl,
-      shortcode: shortCode,
-      expiry: expirationTime,
+      longUrl: originalUrl,
+      shortCode: shortCode,
+      expiresAt: expirationTime,
     });
 
     await newEntry.save();
@@ -39,17 +39,17 @@ export const redirectUrl = async (req, res) => {
   const { code } = req.params;
 
   try {
-    const record = await Url.findOne({ shortcode: code });
+    const record = await Url.findOne({ shortCode: code });
 
     if (!record) {
       return res.status(404).json({ message: 'This shortcode does not exist' });
     }
 
-    if (new Date() > record.expiry) {
+    if (new Date() > record.expiresAt) {
       return res.status(410).json({ message: 'The link has expired' });
     }
 
-    return res.redirect(record.originalUrl);
+    return res.redirect(record.longUrl);
 
   } catch (err) {
     return res.status(500).json({ message: 'Internal Server Error' });
